@@ -8,21 +8,38 @@ import Photos from "./Photos";
 const Home = () => {
   const [data, setData] = useState([]);
   const [likes, setLikes] = useState(0);
+  const [liked, setLiked] = useState([]);
   const [query, setQuery] = useState("");
 
   const API =
     "https://pixabay.com/api/?key=26032813-5eca57a90774446a771ac3a81&image_type=photo";
 
+  const likeChecker = (url) => {
+
+    if(liked.length === 0){
+      return false;
+    }
+
+    const ind = liked.findIndex(
+      (item) => item.src === url
+    );
+
+    if(ind === -1){
+      return false;
+    }
+
+    return true;
+  }
+
   const fetchPost = () => {
     axios.get(`${API}&q=${query}`).then((res) => {
       var filler = [];
-      console.log(res.data.hits);
       res.data.hits.map((item) => {
         filler.push({
           src: item.webformatURL,
           width: 400,
           height: item.webformatHeight,
-          liked: false,
+          liked: likeChecker(item.webformatURL),
         });
         setData(filler);
         localStorage.setItem("photos", JSON.stringify(filler));
@@ -38,6 +55,7 @@ const Home = () => {
     } else {
       setData(JSON.parse(localStorage.getItem("photos")));
       setLikes(JSON.parse(localStorage.getItem("likes")));
+      setLiked(JSON.parse(localStorage.getItem("liked")));
     }
   }, []);
 

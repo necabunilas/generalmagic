@@ -16,23 +16,68 @@ const Photos = (props) => {
   };
 
   const handleLike = (index) => {
-    if (!props.home) {
-      setOpen(false);
-    }
     if (props.data[index].liked === false) {
       localStorage.setItem("likes", JSON.stringify(props.likes + 1));
     } else {
       localStorage.setItem("likes", JSON.stringify(props.likes - 1));
     }
-    const updatedValue = [...props.data];
-    updatedValue[index] = {
-      src: props.data[index].src,
-      width: props.data[index].width,
-      height: props.data[index].height,
-      liked: !props.data[index].liked,
-    };
-    localStorage.setItem("photos", JSON.stringify(updatedValue));
-    props.updateData(updatedValue, (props.data[index].liked === false) ? props.likes + 1 : props.likes - 1 )
+
+    if (props.home) {
+      var temp = JSON.parse(localStorage.getItem("liked"));
+      if (props.data[index].liked === false) {
+        //add item to liked
+        const newItem = {
+          src: props.data[index].src,
+          width: props.data[index].width,
+          height: props.data[index].height,
+          liked: true,
+        };
+        temp.push(newItem);
+        localStorage.setItem("liked", JSON.stringify(temp));
+      } else {
+        const filtered = temp.filter(
+          (item) => item.src !== props.data[index].src
+        );
+        localStorage.setItem("liked", JSON.stringify(filtered));
+      }
+      //update page data
+      const updatedValue = [...props.data];
+      updatedValue[index] = {
+        src: props.data[index].src,
+        width: props.data[index].width,
+        height: props.data[index].height,
+        liked: !props.data[index].liked,
+      };
+      localStorage.setItem("photos", JSON.stringify(updatedValue));
+      props.updateData(
+        updatedValue,
+        props.data[index].liked === false ? props.likes + 1 : props.likes - 1
+      );
+    } else {
+      setOpen(false);
+      var localtemp = JSON.parse(localStorage.getItem("photos"));
+      console.log(localtemp);
+      console.log(props.data);
+      //update local storage
+      const ind = localtemp.findIndex(
+        (item) => item.src == props.data[index].src
+      );
+
+      if (ind !== -1) {
+        localtemp[ind] = {
+          src: props.data[index].src,
+          width: props.data[index].width,
+          height: props.data[index].height,
+          liked: !props.data[index].liked,
+        };
+
+        localStorage.setItem("photos", JSON.stringify(localtemp));
+      }
+      //remove from page
+      const removed = props.data.filter(item => item.src !== props.data[index].src);
+      localStorage.setItem("liked", JSON.stringify(removed));
+      props.updateData(removed, props.likes - 1);
+    }
   };
 
   return (

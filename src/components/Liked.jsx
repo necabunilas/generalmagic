@@ -9,7 +9,7 @@ const Liked = () => {
   const [likes, setLikes] = useState(0);
 
   useEffect(() => {
-    setData(JSON.parse(localStorage.getItem("photos")));
+    setData(JSON.parse(localStorage.getItem("liked")));
     setLikes(JSON.parse(localStorage.getItem("likes")));
   }, []);
 
