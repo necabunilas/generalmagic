@@ -56,11 +56,9 @@ const Photos = (props) => {
     } else {
       setOpen(false);
       var localtemp = JSON.parse(localStorage.getItem("photos"));
-      console.log(localtemp);
-      console.log(props.data);
       //update local storage
       const ind = localtemp.findIndex(
-        (item) => item.src == props.data[index].src
+        (item) => item.src === props.data[index].src
       );
 
       if (ind !== -1) {
