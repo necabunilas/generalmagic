@@ -80,6 +80,15 @@ const Photos = (props) => {
     }
   };
 
+  const widthProvider = (index) => {
+    const mod = index % 9;
+    if(mod < 5){
+      return 282
+    }else{
+      return 360
+    }
+  }
+
   return (
     <>
       <Stack display="flex" sx={{ flexFlow: "row wrap" }}>
@@ -87,14 +96,14 @@ const Photos = (props) => {
           return (
             (props.home || photo.liked) && (
               <Stack
-                style={{ height: 253, width: photo.width }}
+                style={{ height: 253, width: widthProvider(index) }}
                 className="container"
                 key={index}
               >
                 <img
                   src={photo.src}
                   height={253}
-                  width={photo.width}
+                  width={widthProvider(index)}
                   key={index}
                   alt="test"
                   className="img"
@@ -156,7 +165,7 @@ const Photos = (props) => {
             margin: "50px 100px 80px 100px",
           }}
           src={props.data[imgIndex] && props.data[imgIndex].src}
-          alt="image"
+          alt="na"
         />
         <Stack className="overlaybig" />
         <Stack className="buttonbig">

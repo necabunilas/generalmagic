@@ -37,7 +37,7 @@ const Home = () => {
       res.data.hits.map((item) => {
         filler.push({
           src: item.webformatURL,
-          width: 400,
+          width: item.webformatWidth,
           height: item.webformatHeight,
           liked: likeChecker(item.webformatURL),
         });
